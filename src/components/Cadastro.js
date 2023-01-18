@@ -1,20 +1,24 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Cadastro() {
   return (
     <WrapperContent>
       <Heading>
         <h1>MyWallet</h1>
       </Heading>
       <InputWrapper>
-        <input type="text" name="email" placeholder="E-mail" />
+        <input name="name" type="text" placeholder="Nome" />
+
+        <input name="email" type="text" placeholder="E-mail" />
 
         <input name="password" type="password" placeholder="Senha" />
-        <Button type="submit" value="Entrar">
-          Entrar
-        </Button>
-        <Link to={`/cadastro`}>Primeira vez? Cadastre-se!</Link>
+        <input name="password" type="password" placeholder="Confirme a senha" />
+
+        <Button type="submit" value="Cadastrar">Cadastrar</Button>
+        <Link to={`/`}>
+          Já tem uma conta? Faça login!
+        </Link>
       </InputWrapper>
     </WrapperContent>
   );
@@ -33,7 +37,7 @@ const Heading = styled.div`
   width: 147px;
   height: 50px;
   left: 113px;
-  top: 159px;
+  top: 95px;
 
   h1 {
     font-family: "Saira Stencil One", cursive;
@@ -48,32 +52,35 @@ const InputWrapper = styled.div`
   width: 375px;
   margin: auto 25px auto 20px;
   position: relative;
-
+  
   input {
     width: 326px;
-    height: 58px;
+    height: 58px; 
     margin-top: 15px;
-    font-family: "Raleway", sans-serif;
     border-radius: 5px;
-    border: 1px solid #925cbd;
+    border: 1px solid #d4d4d4;
+    font-family: 'Raleway', sans-serif;
     font-weight: 400;
     color: #101010;
-    font-size: 23px;
+    font-size: 20px;
   }
   input:nth-child(1),
-  input:nth-child(2) {
+  input:nth-child(2),
+  input:nth-child(3),
+  input:nth-child(4) {
     padding-left: 10px;
   }
   a {
-    font-weight: 700;
-    font-size: 15px;
-    color: #fff;
-    font-family: "Raleway", sans-serif;
-    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #52b6ff;
     margin: auto;
     padding-left: 60px;
     position: relative;
     top: 15px;
+    text-decoration: none;
+    color: red;
   }
   a:visited {
     color: #fff;
@@ -86,14 +93,14 @@ const InputWrapper = styled.div`
 `;
 
 const Button = styled.button`
-  width: 340px;
-  height: 58px;
-  background-color: #a328d6;
+  background-color: #A328D6;;
   color: #fff;
-  font-size: 23px;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
+  font-size: 21px;
+  width: 342px;
+  height: 46px;
   margin-top: 15px;
+  border-radius: 5px;
+  font-family: 'Raleway', sans-serif;
   font-weight: 700;
+  border: none;
 `;
