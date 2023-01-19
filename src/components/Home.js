@@ -2,6 +2,19 @@ import styled from "styled-components";
 import Exit from "../assets/exit.png";
 import Minus from "../assets/minus.png";
 import Plus from "../assets/plus.png";
+import { Link } from "react-router-dom";
+
+function Money(props) {
+  return (
+    <TransactionSection>
+      <img src={props.pic} alt="icon" />
+      <p>
+        Nova <br></br>
+        {props.movement}
+      </p>
+    </TransactionSection>
+  );
+}
 
 export default function Home() {
   return (
@@ -12,14 +25,12 @@ export default function Home() {
         <p>Não há registros de entrada ou saída</p>
       </Content>
       <CashMovement>
-        <Money>
-          <img src={Plus} alt="add"/>
-          <p>Nova <br></br>entrada</p>
-        </Money>
-        <Money>
-          <img src={Minus} alt="minus"/>
-          <p>Nova <br></br>saída</p>
-        </Money>
+        <Link to="/nova-entrada">
+          <Money pic={Plus} movement={"entrada"} />
+        </Link>
+        <Link to="/nova-saida">
+          <Money pic={Minus} movement={"saída"} />
+        </Link>
       </CashMovement>
     </WrapperContent>
   );
@@ -77,17 +88,17 @@ const Content = styled.div`
 `;
 
 const CashMovement = styled.div`
-  width: 325px;
+ width: 325px;
   height: 115px;
   position: absolute;
-  left: 25px;
-  top: 537px;
+  right: 100px;
+  top: 536px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
-const Money = styled.div`
-  position: relative;
+const TransactionSection = styled.div`
+  position: absolute;
   width: 155px;
   height: 114px;
   background-color: #a328d6;
