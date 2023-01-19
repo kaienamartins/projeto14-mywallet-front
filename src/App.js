@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Cadastro from "./components/Cadastro";
 import Home from "./components/Home";
 import NovaEntrada from "./components/NovaEntrada";
+import NovaSaida from "./components/NovaSaida";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/cadastro" element={<Cadastro/>}/>
         <Route path="/home" element={<Home/>}/>
         <Route path="/nova-entrada" element={<NovaEntrada/>}/>
+        <Route path="/nova-saida" element={<NovaSaida/>}/>
       </Routes>
     </BrowserRouter>
   );
