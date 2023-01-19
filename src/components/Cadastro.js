@@ -1,24 +1,110 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
 
 export default function Cadastro() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: ",",
+  });
+
+  const navigate = useNavigate();
+  const [blocked, setBlocked] = useState(false);
+  const [signUp, setSignUp] = useState();
+
+  function handleForm(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function createAccount(e) {
+    e.preventDefault();
+    const URL = "http://localhost:5000/sign-up";
+    const body = { ...form };
+    setBlocked(true);
+    const promise = axios.post(URL, body);
+
+    promise.then((res) => {
+      console.log(res.data);
+      setSignUp(
+        <ThreeDots
+          color="fafafa"
+          radius="9"
+          ariaLabel="tail-spin-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      );
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    });
+    promise.catch((err) => {
+      alert(err.response.data.message);
+    });
+  }
+
   return (
     <WrapperContent>
       <Heading>
         <h1>MyWallet</h1>
       </Heading>
       <InputWrapper>
-        <input name="name" type="text" placeholder="Nome" />
+        <input
+          name="name"
+          type="text"
+          placeholder="Nome"
+          value={form.name}
+          onChange={handleForm}
+          required
+          disabled={blocked}
+        />
 
-        <input name="email" type="text" placeholder="E-mail" />
+        <input
+          name="email"
+          type="text"
+          placeholder="E-mail"
+          value={form.email}
+          onChange={handleForm}
+          required
+          disabled={blocked}
+        />
 
-        <input name="password" type="password" placeholder="Senha" />
-        <input name="password" type="password" placeholder="Confirme a senha" />
+        <input
+          name="password"
+          type="password"
+          placeholder="Senha"
+          value={form.password}
+          onChange={handleForm}
+          required
+          disabled={blocked}
+        />
 
-        <Button type="submit" value="Cadastrar">Cadastrar</Button>
-        <Link to={`/`}>
-          Já tem uma conta? Faça login!
-        </Link>
+        <input
+          name="password"
+          type="password"
+          placeholder="Confirme a senha"
+          value={form.password}
+          onChange={handleForm}
+          required
+          disabled={blocked}
+        />
+
+        <Button
+          type="submit"
+          value="Cadastrar"
+          required
+          onClick={createAccount}
+        >
+          {blocked ? <Loading>{signUp}</Loading> : "Cadastrar"}
+        </Button>
+        <Link to={`/`}>Já tem uma conta? Faça login!</Link>
       </InputWrapper>
     </WrapperContent>
   );
@@ -27,7 +113,7 @@ export default function Cadastro() {
 const WrapperContent = styled.div`
   width: 375px;
   height: 667px;
-  background-color: #925CBD;
+  background-color: #925cbd;
   display: flex;
 `;
 
@@ -52,14 +138,14 @@ const InputWrapper = styled.div`
   width: 375px;
   margin: auto 25px auto 20px;
   position: relative;
-  
+
   input {
     width: 326px;
-    height: 58px; 
+    height: 58px;
     margin-top: 15px;
     border-radius: 5px;
     border: 1px solid #d4d4d4;
-    font-family: 'Raleway', sans-serif;
+    font-family: "Raleway", sans-serif;
     font-weight: 400;
     color: #101010;
     font-size: 20px;
@@ -71,7 +157,7 @@ const InputWrapper = styled.div`
     padding-left: 10px;
   }
   a {
-    font-family: 'Raleway', sans-serif;
+    font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size: 14px;
     color: #52b6ff;
@@ -86,21 +172,31 @@ const InputWrapper = styled.div`
     color: #fff;
   }
 
-  input::placeholder{
+  input::placeholder {
     color: #181818;
     font-size: 21px;
   }
 `;
 
 const Button = styled.button`
-  background-color: #A328D6;;
+  background-color: #a328d6;
   color: #fff;
   font-size: 21px;
   width: 342px;
   height: 46px;
   margin-top: 15px;
   border-radius: 5px;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-weight: 700;
   border: none;
+`;
+
+const Loading = styled.div`
+  width: 160px;
+  height: 160px;
+  line-height: normal;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 60px;
+  margin-top: -15px;
 `;

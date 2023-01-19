@@ -116,7 +116,7 @@ const Heading = styled.div`
 
 const InputWrapper = styled.div`
   width: 375px;
-  margin: auto 25px auto 20px;
+  margin: auto 20px auto 20px;
   position: relative;
 
   input {
