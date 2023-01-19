@@ -1,18 +1,88 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  const [disabled, setDisabled] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState();
+
+  function handleForm(e) {
+    setForm({
+      ...form,
+      [e.target]: e.target.value,
+    });
+  }
+
+  function Login(e) {
+    e.preventDefault();
+    const URL = "http://localhost:5000/login";
+    const body = { ...form };
+    const promise = axios.post(URL, body);
+
+    promise.then((res) => {
+      setDisabled(true);
+      setLoginSuccess(
+        <ThreeDots
+          color="fafafa"
+          radius="9"
+          ariaLabel="tail-spin-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      );
+    });
+    setTimeout(() => {
+      navigate("/cadastro");
+    }, 5000);
+
+    promise.catch((err) => {
+      alert(err.response.data.message);
+      setDisabled(false);
+    });
+  }
+
   return (
     <WrapperContent>
       <Heading>
         <h1>MyWallet</h1>
       </Heading>
       <InputWrapper>
-        <input type="text" name="email" placeholder="E-mail" />
+        <input
+          type="text"
+          name="email"
+          placeholder="E-mail"
+          value={form.email}
+          onChange={handleForm}
+          required
+          disabled={disabled}
+        />
 
-        <input name="password" type="password" placeholder="Senha" />
-        <Button type="submit" value="Entrar">
-          Entrar
+        <input
+          name="password"
+          type="password"
+          placeholder="Senha"
+          value={form.password}
+          onChange={handleForm}
+          required
+          disabled={disabled}
+        />
+        <Button
+          type="submit"
+          value="Entrar"
+          onClick={Login}
+          disabled={disabled}
+          required
+        >
+          {disabled ? <Loading>{loginSuccess}</Loading> : "Entrar"}
         </Button>
         <Link to={`/cadastro`}>Primeira vez? Cadastre-se!</Link>
       </InputWrapper>
@@ -23,7 +93,7 @@ export default function Login() {
 const WrapperContent = styled.div`
   width: 375px;
   height: 667px;
-  background-color: #925CBD;
+  background-color: #925cbd;
   display: flex;
 `;
 
@@ -79,7 +149,7 @@ const InputWrapper = styled.div`
     color: #fff;
   }
 
-  input::placeholder{
+  input::placeholder {
     color: #181818;
     font-size: 21px;
   }
@@ -96,4 +166,14 @@ const Button = styled.button`
   text-align: center;
   margin-top: 15px;
   font-weight: 700;
+`;
+
+const Loading = styled.div`
+  width: 160px;
+  height: 160px;
+  line-height: normal;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 60px;
+  margin-top: -15px;
 `;
