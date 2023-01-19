@@ -12,7 +12,7 @@ export default function Cadastro() {
   });
 
   const navigate = useNavigate();
-  const [blocked, setBlocked] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [signUp, setSignUp] = useState();
 
   function handleForm(e) {
@@ -26,7 +26,7 @@ export default function Cadastro() {
     e.preventDefault();
     const URL = "http://localhost:5000/sign-up";
     const body = { ...form };
-    setBlocked(true);
+    setDisabled(true);
     const promise = axios.post(URL, body);
 
     promise.then((res) => {
@@ -63,7 +63,7 @@ export default function Cadastro() {
           value={form.name}
           onChange={handleForm}
           required
-          disabled={blocked}
+          disabled={disabled}
         />
 
         <input
@@ -73,27 +73,27 @@ export default function Cadastro() {
           value={form.email}
           onChange={handleForm}
           required
-          disabled={blocked}
+          disabled={disabled}
         />
 
         <input
           name="password"
-          type="password"
-          placeholder="Senha"
-          value={form.password}
+          //value={form.password}
           onChange={handleForm}
+          type="password"
+          placeholder="senha"
           required
-          disabled={blocked}
+          disabled={disabled}
         />
 
         <input
           name="password"
           type="password"
           placeholder="Confirme a senha"
-          value={form.password}
+          //value={form.password}
           onChange={handleForm}
           required
-          disabled={blocked}
+          disabled={disabled}
         />
 
         <Button
@@ -102,7 +102,7 @@ export default function Cadastro() {
           required
           onClick={createAccount}
         >
-          {blocked ? <Loading>{signUp}</Loading> : "Cadastrar"}
+          {disabled ? <Loading>{signUp}</Loading> : "Cadastrar"}
         </Button>
         <Link to={`/`}>Já tem uma conta? Faça login!</Link>
       </InputWrapper>

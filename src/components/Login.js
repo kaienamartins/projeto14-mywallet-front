@@ -17,7 +17,7 @@ export default function Login() {
   function handleForm(e) {
     setForm({
       ...form,
-      [e.target]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
@@ -41,7 +41,7 @@ export default function Login() {
       );
     });
     setTimeout(() => {
-      navigate("/cadastro");
+      navigate("/home");
     }, 5000);
 
     promise.catch((err) => {
