@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+import { AuthContext } from "../Auth";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -10,9 +11,9 @@ export default function Login() {
     password: "",
   });
   const navigate = useNavigate();
-
   const [disabled, setDisabled] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState();
+  const { setToken, setUsername } = useContext(AuthContext);
 
   function handleForm(e) {
     setForm({
@@ -29,6 +30,8 @@ export default function Login() {
 
     promise.then((res) => {
       setDisabled(true);
+      setToken(res.data.token);
+      setUsername(res.data.name);
       setLoginSuccess(
         <ThreeDots
           color="fafafa"

@@ -2,9 +2,10 @@ import styled from "styled-components";
 import Exit from "../assets/exit.png";
 import Minus from "../assets/minus.png";
 import Plus from "../assets/plus.png";
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Auth";
+import axios from "axios";
 
 function Money(props) {
   if (props.total === 0 && props.movement === "saída") {
@@ -23,44 +24,44 @@ function Money(props) {
   );
 }
 
-export default function Home() {
-  const { entries } = useContext(AuthContext);
+export default function Home({ item }) {
+  const { token, username } = useContext(AuthContext);
   let total = 0;
   const formatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
+  const navigate = useNavigate();
+  const [items, setItems] = useState("");
+  const { value, description, type } = entry;
 
-
+  useEffect(() => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.get("http://localhost:5000/entries", config);
+    promise.then((res) => {
+      setItems(res.data);
+    });
+    promise.catch((err) => {
+      alert(err.res.data.message);
+      navigate("/");
+    });
+  }, [token, navigate, items]);
 
   return (
     <>
       <WrapperContent>
-        <Name>Olá, Kaiena</Name>
+        <Name>Olá, {username}</Name>
         <img src={Exit} alt="exit" />
 
-        <Content hasEntries={entries.length > 0}>
-          {entries.length > 0 ? (
-            entries.reverse().map((entry, i) => {
-              const date = new Date();
-              const month = (date.getMonth() + 1).toString().padStart(2, "0");
-              if (entry.type === "entrada") {
-                total += parseFloat(entry.value);
-              } else if (entry.type === "saida") {
-                total -= parseFloat(entry.value);
-              }
-              if (total <= 0) {
-                total = 0;
-              }
-              return (
-                <ContentData type={entry.type} key={i}>
-                  <h5>{`${date.getDate()}/${month}`}</h5>
-                  <h3>{entry.description}</h3> <h4>{entry.value}</h4>
-                </ContentData>
-              );
-            })
-          ) : (
+        <Content>
+          {!items.length === 0 ? (
             <p>Não há registros de entrada ou saída</p>
+          ) : (
+            <ContentData>
+              <h5>{`${date.getDate()}/${month}`}</h5>
+              <h3>{entry.description}</h3>
+              <h4>{entry.value}</h4>
+            </ContentData>
           )}
           <Total>
             <h1>saldo</h1>
@@ -69,10 +70,10 @@ export default function Home() {
         </Content>
         <CashMovement>
           <Link to="/nova-entrada">
-            <Money pic={Plus} movement={"entrada"}/>
+            <Money pic={Plus} movement={"entrada"} />
           </Link>
           <Link to="/nova-saida">
-            <Money pic={Minus} movement={"saída"}/>
+            <Money pic={Minus} movement={"saída"} />
           </Link>
         </CashMovement>
       </WrapperContent>

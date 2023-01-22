@@ -1,39 +1,90 @@
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Auth";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function NovaEntrada() {
-  const { entries, setEntries } = useContext(AuthContext);
-  const [value, setValue] = useState("");
-  const [description, setDescription] = useState("");
+  const { token } = useContext(AuthContext);
+  const [form, setForm] = useState({value: "", description: ""});
+  const [blocked, setBlocked] = useState(false);
+  const navigate = useNavigate();
+
+
+  function handleForm(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+      type: "deposit",
+    });
+  }
+
+  useEffect(() => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.get("http://localhost:5000/entries", config);
+    promise.then((res) => {
+      alert("Entrada realizada com sucesso!")
+      navigate("/home")
+    });
+    promise.catch((err) => {
+      alert(err.res.data.message);
+      navigate("/home");
+    });
+
+  }, [navigate, token]);
+
+
+  function create(e) {
+    const URL = "http://localhost:5000/entries";
+    const body = { ...form };
+    setBlocked(true);
+    e.preventDefault();
+    form.value = Number(form.value).toFixed(2);
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.post(URL, body, config);
+    promise.then((res) => {
+      navigate("/home");
+    });
+    promise.catch((err) => {
+      alert(err.res.data.message);
+      navigate("/home");
+    });
+  }
 
   return (
     <Wrapper>
       <Title>Nova entrada</Title>
-      <InputArea>
+      <InputArea onSubmit={create}>
         <input
-          type="number"
+          min="1"
+          onChange={handleForm}
+          type="text"
+          disabled={blocked}
+          pattern="[-+]?[0-9]*\.?[0-9]*"
           name="valor"
           placeholder="Valor"
-          onChange={(e) => setValue(e.target.value)}
+          value={form.value}
+          required
         />
 
         <input
           type="text"
           name="descrição"
+          disabled={blocked}
           placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={handleForm}
+          value={form.description}
+          required
         />
-
-        <button
-          onClick={() => {
-            setEntries([...entries, {value, description, type: "entrada"}]);
-            setValue("");
-            setDescription("");
-          }}
-        >
-          Salvar entrada
-        </button>
+        <Link to={"/home"}>
+          {" "}
+          <button type="submit">
+            Salvar entrada
+          </button>
+        </Link>
       </InputArea>
     </Wrapper>
   );

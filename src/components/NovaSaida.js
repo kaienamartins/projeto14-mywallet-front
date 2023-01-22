@@ -1,36 +1,82 @@
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import axios from "axios";
 import { AuthContext } from "../Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function NovaSaida() {
-  const { entries, setEntries } = useContext(AuthContext);
-  const [value, setValue] = useState("");
-  const [description, setDescription] = useState("");
+  const { token } = useContext(AuthContext);
+  const [form, setForm] = useState({value: "", description: ""});
+  const [blocked, setBlocked] = useState(false);
+  const navigate = useNavigate();
+
+  function handleForm(e) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+      type: "withdraw",
+    });
+  }
+
+  useEffect(() => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.get("http://localhost:5000/entries", config);
+    promise.then((res) => {
+      alert("Saida realizada com sucesso!")
+      navigate("/home");
+    });
+    promise.catch((err) => {
+      alert(err.res.data.message);
+      navigate("/");
+    });
+
+  }, [navigate, token]);
+
+  function create(e) {
+    const URL = "http://localhost:5000/entries";
+    const body = { ...form };
+    setBlocked(true);
+    e.preventDefault();
+    form.value = Number(form.value).toFixed(2);
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const promise = axios.post(URL, body, config);
+    promise.then((res) => {
+      navigate("/home");
+    });
+    promise.catch((err) => {
+      alert(err.res.data.message);
+      navigate("/home");
+    });
+  }
+
 
   return (
     <Wrapper>
       <Title>Nova saida</Title>
-      <InputArea>
+      <InputArea onSubmit={create}>
         <input
-          type="number"
+          min="1"
+          onChange={handleForm}
+          type="text"
+          disabled={blocked}
+          pattern="[-+]?[0-9]*\.?[0-9]*"
           name="valor"
           placeholder="Valor"
-          onChange={(e) => setValue(e.target.value)}
+          value={form.value}
+          required
         />
 
         <input
           type="text"
           name="descrição"
+          disabled={blocked}
           placeholder="Descrição"
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={handleForm}
+          value={form.description}
+          required
         />
 
-        <button
-          onClick={() => {
-            setEntries([...entries, {value, description, type: "saida"}]);
-            setValue("");
-            setDescription("");
-          }}
+        <button type="submit"
         >
           Salvar saída
         </button>
