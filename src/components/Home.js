@@ -68,7 +68,7 @@ export default function Home() {
         <Name>Olá, {username}</Name>
         <img src={Exit} alt="exit" />
 
-        <Content>
+        <Content hasEntries={items.length > 0}>
           {!items.length === 0 ? (
             <p>Não há registros de entrada ou saída</p>
           ) : (
