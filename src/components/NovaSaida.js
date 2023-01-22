@@ -1,25 +1,50 @@
 import styled from "styled-components";
+import { useContext, useState } from "react";
+import { AuthContext } from "../Auth";
 
+export default function NovaSaida() {
+  const { entries, setEntries } = useContext(AuthContext);
+  const [value, setValue] = useState("");
+  const [description, setDescription] = useState("");
 
-export default function NovaEntrada(){
   return (
     <Wrapper>
-      <Title>Nova saída</Title>
+      <Title>Nova saida</Title>
       <InputArea>
-        <input type="number" name="valor" placeholder="Valor"/>
-        <input type="text" name="descrição" placeholder="Descrição"/>
-        <button>Salvar saída</button>
+        <input
+          type="number"
+          name="valor"
+          placeholder="Valor"
+          onChange={(e) => setValue(e.target.value)}
+        />
+
+        <input
+          type="text"
+          name="descrição"
+          placeholder="Descrição"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <button
+          onClick={() => {
+            setEntries([...entries, {value, description, type: "saida"}]);
+            setValue("");
+            setDescription("");
+          }}
+        >
+          Salvar saída
+        </button>
       </InputArea>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
   width: 375px;
   height: 667px;
   background-color: #925cbd;
   display: flex;
-`
+`;
 
 const Title = styled.h1`
   position: absolute;
@@ -33,14 +58,15 @@ const Title = styled.h1`
   line-height: 31px;
 `;
 
-const InputArea = styled.div `
+const InputArea = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
   left: 25px;
   top: 96px;
 
-  input, button {
+  input,
+  button {
     margin-bottom: 13px;
     width: 326px;
     height: 58px;
@@ -54,10 +80,11 @@ const InputArea = styled.div `
     box-sizing: border-box;
   }
 
-  button{
-    background-color: #A328D6;
+  button {
+    background-color: #a328d6;
     color: #fff;
     font-weight: 700;
+    cursor: pointer;
   }
 
   input::placeholder {
@@ -69,4 +96,4 @@ const InputArea = styled.div `
   input::focus {
     border: none;
   }
-`
+`;
