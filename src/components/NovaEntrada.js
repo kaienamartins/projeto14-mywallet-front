@@ -4,21 +4,20 @@ import { AuthContext } from "../Auth";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-
+import dayjs from "dayjs";
 
 export default function NovaEntrada() {
   const { token } = useContext(AuthContext);
-  const [form, setForm] = useState({value: "", description: ""});
+  const [form, setForm] = useState({ value: "", description: "" });
   const [blocked, setBlocked] = useState(false);
   const navigate = useNavigate();
-
 
   function handleForm(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
       type: "deposit",
+      day: dayjs().format("DD/MM"),
     });
   }
 
@@ -26,16 +25,14 @@ export default function NovaEntrada() {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     const promise = axios.get("http://localhost:5000/entries", config);
     promise.then((res) => {
-      alert("Entrada realizada com sucesso!")
-      navigate("/home")
+      alert("Entrada realizada com sucesso!");
+      navigate("/home");
     });
     promise.catch((err) => {
       alert(err.res.data.message);
       navigate("/home");
     });
-
   }, [navigate, token]);
-
 
   function create(e) {
     const URL = "http://localhost:5000/entries";
@@ -81,9 +78,7 @@ export default function NovaEntrada() {
         />
         <Link to={"/home"}>
           {" "}
-          <button type="submit">
-            Salvar entrada
-          </button>
+          <button type="submit">Salvar entrada</button>
         </Link>
       </InputArea>
     </Wrapper>

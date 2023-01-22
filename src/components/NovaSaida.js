@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../Auth";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export default function NovaSaida() {
   const { token } = useContext(AuthContext);
@@ -15,6 +16,7 @@ export default function NovaSaida() {
       ...form,
       [e.target.name]: e.target.value,
       type: "withdraw",
+      day: dayjs().format("DD/MM")
     });
   }
 

@@ -6,9 +6,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Auth";
 import axios from "axios";
+import Transaction from "./Transaction";
 
 function Money(props) {
-  if (props.total === 0 && props.movement === "saída") {
+  if (props.total === 0 && props.movement === "withdraw") {
     return null;
   }
   return (
@@ -24,22 +25,36 @@ function Money(props) {
   );
 }
 
-export default function Home({ item }) {
+export default function Home() {
   const { token, username } = useContext(AuthContext);
-  let total = 0;
+  const [total, setTotal] = useState(0);
   const formatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
   const navigate = useNavigate();
-  const [items, setItems] = useState("");
-  const { value, description, type } = entry;
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     const promise = axios.get("http://localhost:5000/entries", config);
     promise.then((res) => {
       setItems(res.data);
+      const handleTotal = () => {
+        let total = 0;
+        items.forEach((entry) => {
+          if (entry.type === "deposit") {
+            total += parseFloat(entry.value);
+          } else if (entry.type === "withdraw") {
+            total -= parseFloat(entry.value);
+          }
+          if (total <= 0) {
+            total = 0;
+          }
+        });
+        setTotal(total);
+      };
+      handleTotal();
     });
     promise.catch((err) => {
       alert(err.res.data.message);
@@ -57,11 +72,11 @@ export default function Home({ item }) {
           {!items.length === 0 ? (
             <p>Não há registros de entrada ou saída</p>
           ) : (
-            <ContentData>
-              <h5>{`${date.getDate()}/${month}`}</h5>
-              <h3>{entry.description}</h3>
-              <h4>{entry.value}</h4>
-            </ContentData>
+            <ul>
+              {items.map((entry, i) => (
+                <Transaction entry={entry} key={i} />
+              ))}
+            </ul>
           )}
           <Total>
             <h1>saldo</h1>
@@ -129,46 +144,6 @@ const Content = styled.div`
     line-height: 23px;
     text-align: center;
     color: #868686;
-  }
-`;
-
-const ContentData = styled.div`
-  width: 95%;
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  margin: 5px 10px;
-
-  h5 {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 19px;
-    color: #c6c6c6;
-  }
-
-  h3 {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 18px;
-    color: #000;
-    width: 100%;
-    text-align: center;
-    margin-left: calc(50% - 90px);
-  }
-  h4 {
-    color: ${(props) => (props.type === "entrada" ? "#03AC00" : "#C70000")};
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 19px;
-    margin-left: 15px;
-    width: 100%;
-    text-align: right;
   }
 `;
 
