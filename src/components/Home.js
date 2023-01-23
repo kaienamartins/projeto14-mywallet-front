@@ -40,8 +40,9 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const URL = process.env.REACT_APP_API_URL;
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const promise = axios.get("http://localhost:5000/entries", config);
+    const promise = axios.get(`${URL}/registries`, config);
     promise.then((res) => {
       setItems(res.data);
       const handleTotal = () => {

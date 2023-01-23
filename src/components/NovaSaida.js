@@ -35,13 +35,13 @@ export default function NovaSaida() {
   }, [navigate, token]);
 
   function create(e) {
-    const URL = "http://localhost:5000/entries";
+    const URL = process.env.REACT_APP_API_URL;
     const body = { ...form };
     setBlocked(true);
     e.preventDefault();
     form.value = Number(form.value).toFixed(2);
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const promise = axios.post(URL, body, config);
+    const promise = axios.post(`${URL}/registries`, body, config);
     promise.then((res) => {
       navigate("/home");
     });

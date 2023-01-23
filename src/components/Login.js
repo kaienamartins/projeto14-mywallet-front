@@ -24,9 +24,9 @@ export default function Login() {
 
   function Login(e) {
     e.preventDefault();
-    const URL = "http://localhost:5000/login";
+    const URL = process.env.REACT_APP_API_URL;
     const body = { ...form };
-    const promise = axios.post(URL, body);
+    const promise = axios.post(`${URL}/login`, body);
 
     promise.then((res) => {
       setDisabled(true);

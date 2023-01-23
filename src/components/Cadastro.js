@@ -24,10 +24,10 @@ export default function Cadastro() {
 
   function createAccount(e) {
     e.preventDefault();
-    const URL = "http://localhost:5000/sign-up";
+    const URL = process.env.REACT_APP_API_URL;
     const body = { ...form };
     setDisabled(true);
-    const promise = axios.post(URL, body);
+    const promise = axios.post(`${URL}/sign-up`, body);
 
     promise.then((res) => {
       console.log(res.data);
