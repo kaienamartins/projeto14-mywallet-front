@@ -10,6 +10,7 @@ export default function NovaSaida() {
   const [form, setForm] = useState({value: "", description: ""});
   const [blocked, setBlocked] = useState(false);
   const navigate = useNavigate();
+  const URL = process.env.REACT_APP_API_URL;
 
   function handleForm(e) {
     setForm({
@@ -22,7 +23,7 @@ export default function NovaSaida() {
 
   useEffect(() => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const promise = axios.get("http://localhost:5000/entries", config);
+    const promise = axios.get(`${URL}/registries`, config);
     promise.then((res) => {
       alert("Saida realizada com sucesso!")
       navigate("/home");
@@ -32,10 +33,9 @@ export default function NovaSaida() {
       navigate("/");
     });
 
-  }, [navigate, token]);
+  }, [URL, navigate, token]);
 
   function create(e) {
-    const URL = process.env.REACT_APP_API_URL;
     const body = { ...form };
     setBlocked(true);
     e.preventDefault();

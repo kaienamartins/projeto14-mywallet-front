@@ -91,7 +91,7 @@ export default function Cadastro() {
 
         <input
           name="password"
-          type="password"
+          type="text"
           placeholder="Confirme a senha"
           value={form.password}
           onChange={handleForm}

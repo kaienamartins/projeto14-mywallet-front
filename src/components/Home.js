@@ -8,6 +8,7 @@ import { AuthContext } from "../Auth";
 import axios from "axios";
 import Transaction from "./Transaction";
 
+
 function Money(props) {
   if (props.total === 0 && props.movement === "withdraw") {
     return null;
@@ -74,7 +75,7 @@ export default function Home() {
         <img src={Exit} alt="exit" onClick={logout}/>
 
         <Content hasEntries={items.length > 0}>
-          {!items.length === 0 ? (
+          {items.length === 0 ? (
             <p>Não há registros de entrada ou saída</p>
           ) : (
             <>
