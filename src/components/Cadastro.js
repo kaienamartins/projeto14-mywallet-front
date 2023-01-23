@@ -83,7 +83,7 @@ export default function Cadastro() {
           value={form.password}
           onChange={handleForm}
           type="password"
-          placeholder="senha"
+          placeholder="Senha"
           required
           disabled={disabled}
           data-test="password"
