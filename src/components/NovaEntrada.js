@@ -42,7 +42,7 @@ export default function NovaEntrada() {
     e.preventDefault();
     form.value = Number(form.value).toFixed(2);
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const promise = axios.post(`${URL}/registries`, body, config);
+    const promise = axios.post(`${URL}/transactions`, body, config);
     promise.then((res) => {
       navigate("/home");
     });

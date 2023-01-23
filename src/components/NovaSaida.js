@@ -23,7 +23,7 @@ export default function NovaSaida() {
 
   useEffect(() => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
-    const promise = axios.get(`${URL}/registries`, config);
+    const promise = axios.get(`${URL}/transactions`, config);
     promise.then((res) => {
       alert("Saida realizada com sucesso!")
       navigate("/home");
