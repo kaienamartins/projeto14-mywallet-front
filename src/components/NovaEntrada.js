@@ -65,6 +65,7 @@ export default function NovaEntrada() {
           placeholder="Valor"
           value={form.value}
           required
+          data-test="registry-amount-input"
         />
 
         <input
@@ -75,10 +76,11 @@ export default function NovaEntrada() {
           onChange={handleForm}
           value={form.description}
           required
+          data-test="registry-name-input"
         />
         <Link to={"/home"}>
           {" "}
-          <button type="submit">Salvar entrada</button>
+          <button type="submit" data-test="registry-save">Salvar entrada</button>
         </Link>
       </InputArea>
     </Wrapper>

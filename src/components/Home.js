@@ -13,7 +13,6 @@ function Money(props) {
     return null;
   }
   return (
-    <>
       <TransactionSection>
         <img src={props.pic} alt="icon" />
         <p>
@@ -21,7 +20,6 @@ function Money(props) {
           {props.movement}
         </p>
       </TransactionSection>
-    </>
   );
 }
 
@@ -34,6 +32,12 @@ export default function Home() {
   });
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
+
+
+  function logout(){
+    navigate("/");
+    window.location.reload();
+  }
 
   useEffect(() => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -65,30 +69,30 @@ export default function Home() {
   return (
     <>
       <WrapperContent>
-        <Name>Olá, {username}</Name>
-        <img src={Exit} alt="exit" />
+        <Name data-test="user-name">Olá, {username}</Name>
+        <img src={Exit} alt="exit" onClick={logout}/>
 
         <Content hasEntries={items.length > 0}>
           {!items.length === 0 ? (
             <p>Não há registros de entrada ou saída</p>
           ) : (
-            <ul>
+            <>
               {items.map((entry, i) => (
                 <Transaction entry={entry} key={i} />
               ))}
-            </ul>
+            </>
           )}
           <Total>
             <h1>saldo</h1>
-            <h2>{formatter.format(total)}</h2>
+            <h2 data-test="total-amount">{formatter.format(total)}</h2>
           </Total>
         </Content>
         <CashMovement>
           <Link to="/nova-entrada">
-            <Money pic={Plus} movement={"entrada"} />
+            <Money pic={Plus} movement={"entrada"} data-test="new-income"/>
           </Link>
           <Link to="/nova-saida">
-            <Money pic={Minus} movement={"saída"} />
+            <Money pic={Minus} movement={"saída"} data-test="new-expense"/>
           </Link>
         </CashMovement>
       </WrapperContent>
@@ -176,10 +180,10 @@ const Total = styled.div`
 `;
 
 const CashMovement = styled.div`
-  width: 325px;
+  width: 350px;
   height: 115px;
   position: absolute;
-  right: 100px;
+  right: 90px;
   top: 536px;
   display: flex;
   justify-content: space-around;

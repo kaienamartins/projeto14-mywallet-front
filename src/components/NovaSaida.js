@@ -66,6 +66,7 @@ export default function NovaSaida() {
           placeholder="Valor"
           value={form.value}
           required
+          data-test="registry-amount-input"
         />
 
         <input
@@ -76,9 +77,11 @@ export default function NovaSaida() {
           onChange={handleForm}
           value={form.description}
           required
+          data-test="registry-name-input"
         />
 
         <button type="submit"
+        data-test="registry-save"
         >
           Salvar saída
         </button>

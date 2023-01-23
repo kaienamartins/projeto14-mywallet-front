@@ -64,6 +64,7 @@ export default function Cadastro() {
           onChange={handleForm}
           required
           disabled={disabled}
+          data-test="name"
         />
 
         <input
@@ -74,26 +75,29 @@ export default function Cadastro() {
           onChange={handleForm}
           required
           disabled={disabled}
+          data-test="email"
         />
 
         <input
           name="password"
-          //value={form.password}
+          value={form.password}
           onChange={handleForm}
           type="password"
           placeholder="senha"
           required
           disabled={disabled}
+          data-test="password"
         />
 
         <input
           name="password"
           type="password"
           placeholder="Confirme a senha"
-          //value={form.password}
+          value={form.password}
           onChange={handleForm}
           required
           disabled={disabled}
+          data-test="conf-password"
         />
 
         <Button
@@ -101,6 +105,7 @@ export default function Cadastro() {
           value="Cadastrar"
           required
           onClick={createAccount}
+          data-test="sign-up-submit"
         >
           {disabled ? <Loading>{signUp}</Loading> : "Cadastrar"}
         </Button>

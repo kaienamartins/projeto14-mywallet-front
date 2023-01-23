@@ -6,8 +6,8 @@ export default function Transaction({entry}) {
   return (
     <ContentData>
         <h5>{day}</h5>
-        <h3>{description}</h3>
-        <h4 type={type}>{value}</h4>
+        <h3 data-test="registry-name">{description}</h3>
+        <h4 type={type} data-test="registry-amount">{value}</h4>
     </ContentData>
   );
 }

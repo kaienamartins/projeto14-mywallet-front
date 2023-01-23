@@ -67,6 +67,7 @@ export default function Login() {
           onChange={handleForm}
           required
           disabled={disabled}
+          data-test="email"
         />
 
         <input
@@ -77,6 +78,7 @@ export default function Login() {
           onChange={handleForm}
           required
           disabled={disabled}
+          data-test="password"
         />
         <Button
           type="submit"
@@ -84,6 +86,7 @@ export default function Login() {
           onClick={Login}
           disabled={disabled}
           required
+          data-test="sign-in-submit"
         >
           {disabled ? <Loading>{loginSuccess}</Loading> : "Entrar"}
         </Button>
